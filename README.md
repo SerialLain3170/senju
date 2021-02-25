@@ -1,0 +1,2 @@
+# KawaiiGenerator
+Kawaii generation
