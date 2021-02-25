@@ -1,0 +1,31 @@
+train:
+  epoch: 1000
+  snapshot_interval: 2000
+  batchsize: 25
+  validsize: 25
+  z_dim: 128
+
+dataset:
+  extension: ".jpg"
+  train_size: 128
+
+model:
+  generator:
+    z_dim: 128
+    sn: false
+    lr: 0.0002
+    b1: 0.5
+    b2: 0.99
+    mode: "train"
+  discriminator:
+    sn: false
+    lr: 0.0002
+    b1: 0.5
+    b2: 0.99
+    mode: "train"
+
+loss:
+  adv: 1.0
+  gp: 0.5
+  center: "zero"
+  gp_type: "dragan"
