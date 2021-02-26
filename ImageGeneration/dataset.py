@@ -41,7 +41,7 @@ class BuildDataset(Dataset):
 
     def __getitem__(self, idx):
         img_path = self.pathlist[idx]
-        img = cv.imread(img_path)
+        img = cv.imread(str(img_path))
         img = self._preprocess(img)
 
         return img

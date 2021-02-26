@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import numpy as np
 
 from utils import call_zeros
 from torch import autograd
@@ -105,7 +106,7 @@ class LossCalculator:
                                          t: torch.Tensor) -> torch.Tensor:
 
         fake = discriminator(y)
-        real = discriminator(t)
+        real = discriminator(t).detach()
 
         loss = torch.mean(softplus(-(fake - real)))
 
@@ -131,7 +132,7 @@ class LossCalculator:
                                                  t: torch.Tensor) -> torch.Tensor:
 
         fake = discriminator(y)
-        real = discriminator(t)
+        real = discriminator(t).detach()
 
         fake_mean = fake.mean(0, keepdims=True)
         real_mean = real.mean(0, keepdims=True)
@@ -141,11 +142,11 @@ class LossCalculator:
         return loss
 
     def realness_disloss(self,
-                         discriminator,
-                         y,
-                         t,
-                         anchor1,
-                         anchor0):
+                         discriminator: nn.Module,
+                         y: torch.Tensor,
+                         t: torch.Tensor,
+                         anchor1: torch.Tensor,
+                         anchor0: torch.Tensor) -> torch.Tensor:
         outcomes = self.triplet.atoms
 
         anc_real = call_zeros(t, outcomes, anchor1)
@@ -160,18 +161,18 @@ class LossCalculator:
         return loss_real + loss_fake
 
     def realness_genloss(self,
-                         discriminator,
-                         y,
-                         t,
-                         anchor1,
-                         anchor0):
+                         discriminator: nn.Module,
+                         y: torch.Tensor,
+                         t: torch.Tensor,
+                         anchor1: torch.Tensor,
+                         anchor0: torch.Tensor) -> torch.Tensor:
         outcomes = self.triplet.atoms
 
         anc_real = call_zeros(t, outcomes, anchor1)
         anc_fake = call_zeros(t, outcomes, anchor0)
 
         t_dis = discriminator(t).log_softmax(1).exp()
-        y_dis = discriminator(y).log_softmax(1).exp()
+        y_dis = discriminator(y).log_softmax(1).exp().detach()
 
         loss_real = -self.triplet(anc_fake, y_dis, skewness=-1.0)
         loss_fake = self.triplet(t_dis, y_dis)
@@ -196,7 +197,7 @@ class LossCalculator:
 
         d_interpolates = discriminator(interpolates)
 
-        fake = Variable(torch.cuda.FloatTensor(t.shape[0], 1, 8, 8).fill_(1.0), requires_grad=False)
+        fake = Variable(torch.cuda.FloatTensor(t.shape[0], 1, 1, 1).fill_(1.0), requires_grad=False)
 
         gradients = autograd.grad(
             outputs=d_interpolates,

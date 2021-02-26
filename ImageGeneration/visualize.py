@@ -13,6 +13,8 @@ class Visualizer:
         img = img.detach().cpu().numpy()
         img = np.clip(img*127.5 + 127.5, 0, 255).transpose(1, 2, 0).astype(np.uint8)
 
+        return img
+
     def __call__(self, y, validsize, iteration, outdir):
         width = np.sqrt(validsize)
         pylab.rcParams['figure.figsize'] = (16.0, 16.0)

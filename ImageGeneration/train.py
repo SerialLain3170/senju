@@ -1,10 +1,10 @@
 import yaml
 import torch
 import torch.nn as nn
+import numpy as np
 import argparse
 import pprint
 
-from collections import OrderedDict
 from typing import List, Dict
 from pathlib import Path
 from tqdm import tqdm
@@ -50,6 +50,16 @@ class Trainer:
         self.lossfunc = LossCalculator()
         self.visualizer = Visualizer()
 
+        # Anchor0 definition
+        gauss = np.random.normal(0, 0.1, 1000)
+        count, bins = np.histogram(gauss, 51)
+        self.anchor0 = count / sum(count)
+
+        # Anchor1 definition
+        unif = np.random.uniform(-1, 1, 1000)
+        count, bins = np.histogram(unif, 51)
+        self.anchor1 = count / sum(count)
+
     @staticmethod
     def _setting_model_optim(model: nn.Module,
                              config: Dict):
@@ -60,8 +70,8 @@ class Trainer:
             model.eval()
 
         optimizer = torch.optim.Adam(model.parameters(),
-                                    lr=config["lr"],
-                                    betas=(config["b1"], config["b2"]))
+                                     lr=config["lr"],
+                                     betas=(config["b1"], config["b2"]))
 
         return model, optimizer
 
@@ -100,6 +110,63 @@ class Trainer:
 
         self.visualizer(y, validsize, iteration, self.outdir)
 
+    def _adv_dis_loss(self,
+                      discriminator: nn.Module,
+                      y: torch.Tensor,
+                      t: torch.Tensor) -> torch.Tensor:
+        if self.loss_config["adv"]["type"] == "vanilla":
+            loss = self.loss_config["adv"]["w"] * self.lossfunc.adversarial_disloss(discriminator,
+                                                                                    y,
+                                                                                    t)
+        elif self.loss_config["adv"]["type"] == "hinge":
+            loss = self.loss_config["adv"]["w"] * self.lossfunc.adversarial_hingedis(discriminator,
+                                                                                     y,
+                                                                                     t)
+        elif self.loss_config["adv"]["type"] == "relativistic":
+            loss = self.loss_config["adv"]["w"] * self.lossfunc.adversarial_relativistic_disloss(discriminator,
+                                                                                                 y,
+                                                                                                 t)
+        elif self.loss_config["adv"]["type"] == "ra":
+            loss = self.loss_config["adv"]["w"] * self.lossfunc.adversarial_relativistic_average_disloss(discriminator,
+                                                                                                         y,
+                                                                                                         t)
+        elif self.loss_config["adv"]["type"] == "realness":
+            loss = self.loss_config["adv"]["w"] * self.lossfunc.realness_disloss(discriminator,
+                                                                                 y,
+                                                                                 t,
+                                                                                 self.anchor1,
+                                                                                 self.anchor0)
+
+        return loss
+
+    def _adv_gen_loss(self,
+                      discriminator: nn.Module,
+                      y: torch.Tensor,
+                      t: torch.Tensor) -> torch.Tensor:
+
+        if self.loss_config["adv"]["type"] == "vanilla":
+            loss = self.loss_config["adv"]["w"] * self.lossfunc.adversarial_genloss(discriminator,
+                                                                                    y)
+        elif self.loss_config["adv"]["type"] == "hinge":
+            loss = self.loss_config["adv"]["w"] * self.lossfunc.adversarial_hingegen(discriminator,
+                                                                                     y)
+        elif self.loss_config["adv"]["type"] == "relativistic":
+            loss = self.loss_config["adv"]["w"] * self.lossfunc.adversarial_relativistic_genloss(discriminator,
+                                                                                                 y,
+                                                                                                 t)
+        elif self.loss_config["adv"]["type"] == "ra":
+            loss = self.loss_config["adv"]["w"] * self.lossfunc.adversarial_relativistic_average_genloss(discriminator,
+                                                                                                         y,
+                                                                                                         t)
+        elif self.loss_config["adv"]["type"] == "realness":
+            loss = self.loss_config["adv"]["w"] * self.lossfunc.realness_genloss(discriminator,
+                                                                                 y,
+                                                                                 t,
+                                                                                 self.anchor1,
+                                                                                 self.anchor0)
+
+        return loss
+
     def _iter(self, data):
         t = data
         t = t.cuda()
@@ -111,14 +178,12 @@ class Trainer:
         y = self.gen(z)
 
         # discriminator process
-        adv_dis_loss = self.loss_config["adv"] * self.lossfunc.adversarial_hingedis(self.dis,
-                                                                                    y.detach(),
-                                                                                    t)
-        gp_loss = self.loss_config["gp"] * self.lossfunc.gradient_penalty(self.dis,
-                                                                          y,
+        adv_dis_loss = self._adv_dis_loss(self.dis, y.detach(), t)
+        gp_loss = self.loss_config["gp"]["w"] * self.lossfunc.gradient_penalty(self.dis,
+                                                                          y.detach(),
                                                                           t,
-                                                                          center=self.loss_config["center"],
-                                                                          gp_type=self.loss_config["gp_type"])
+                                                                          center=self.loss_config["gp"]["center"],
+                                                                          gp_type=self.loss_config["gp"]["type"])
 
         dis_loss = adv_dis_loss + gp_loss
 
@@ -127,8 +192,10 @@ class Trainer:
         self.dis_opt.step()
 
         # generator process
-        adv_gen_loss = self.loss_config["adv"] * self.lossfunc.adversarial_hingegen(self.dis,
-                                                                                    t)
+        z = noise_generate(t.size(0), self.train_config["z_dim"])
+        y = self.gen(z)
+
+        adv_gen_loss = self._adv_gen_loss(self.dis, y, t)
 
         gen_loss = adv_gen_loss
 
@@ -145,8 +212,8 @@ class Trainer:
     def __call__(self):
         iteration = 0
         z_fix = self._valid_prepare(self.dataset,
-                                     self.train_config["validsize"],
-                                     self.train_config["z_dim"])
+                                    self.train_config["validsize"],
+                                    self.train_config["z_dim"])
 
         for epoch in range(self.train_config["epoch"]):
             dataloader = DataLoader(self.dataset,

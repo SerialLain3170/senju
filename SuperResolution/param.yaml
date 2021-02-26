@@ -1,0 +1,26 @@
+train:
+    epoch: 1000
+    snapshot_interval: 2000
+    batchsize: 16
+    validsize: 12
+  
+dataset:
+    extension: ".jpg"
+    train_size: 256
+  
+model:
+    generator:
+      num_layers: 16
+      lr: 0.0002
+      b1: 0.5
+      b2: 0.99
+      mode: "train"
+    discriminator:
+      lr: 0.0002
+      b1: 0.5
+      b2: 0.99
+      mode: "train"
+  
+loss:
+    content: 10.0
+    perceptual: 10000.0

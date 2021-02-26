@@ -1,7 +1,24 @@
 import torch
 import torch.nn as nn
 
+from torch.nn import init
 from torch.nn.utils import spectral_norm
+
+
+# Initialization of model
+def weights_init_normal(m: nn.Module):
+    classname = m.__class__.__name__
+    if classname.find('Conv') != -1:
+        init.normal_(m.weight.data, 0.0, 0.02)
+    elif classname.find('Linear') != -1:
+        init.normal(m.weight.data, 0.0, 0.02)
+    elif classname.find('BatchNorm2d') != -1:
+        init.normal_(m.weight.data, 1.0, 0.02)
+        init.constant_(m.bias.data, 0.0)
+
+
+def init_weights(net: nn.Module):
+    net.apply(weights_init_normal)
 
 
 class LBR(nn.Module):
@@ -16,7 +33,7 @@ class LBR(nn.Module):
         else:
             self.l0 = nn.Linear(z_dim, out_ch)
 
-        self.bn0 = nn.BatchNorm2d(out_ch)
+        self.bn0 = nn.BatchNorm1d(out_ch)
         self.relu = nn.LeakyReLU()
 
     def forward(self, x):
@@ -79,11 +96,12 @@ class UpResBlock(nn.Module):
         return x
 
     def forward(self, x):
+        x_sc = self._shortcut(x)
         x = self.up(x)
         x = self.relu(self.bn0(self.c0(x)))
         x = self.relu(self.bn1(self.c1(x)))
 
-        return x + self._shortcut(x)
+        return x + x_sc
 
 
 class DownResBlock(nn.Module):
@@ -116,10 +134,11 @@ class DownResBlock(nn.Module):
         return x
 
     def forward(self, x):
+        x_sc = self._shortcut(x)
         x = self.relu(self.bn0(self.c0(x)))
         x = self.relu(self.bn1(self.c1(x)))
 
-        return x + self._shortcut(x)
+        return x + x_sc
 
 
 class Generator(nn.Module):
@@ -149,8 +168,13 @@ class Generator(nn.Module):
                 nn.Tanh()
             )
 
+        init_weights(self.lbr)
+        init_weights(self.gen)
+        init_weights(self.out)
+
     def forward(self, z):
-        x = self.relu(self.bn0(self.l0(z)))
+        x = self.lbr(z)
+        x = x.view(x.size(0), 1024, 4, 4)
         x = self.gen(x)
         return self.out(x)
 
@@ -170,9 +194,12 @@ class Discriminator(nn.Module):
         )
 
         if sn:
-            self.out = spectral_norm(nn.Conv2d(base*16, 1, 2, 1, 0))
+            self.out = spectral_norm(nn.Conv2d(base*16, 1, 4, 1, 0))
         else:
-            self.out = nn.Conv2d(base*16, 1, 2, 1, 0)
+            self.out = nn.Conv2d(base*16, 1, 4, 1, 0)
+
+        init_weights(self.dis)
+        init_weights(self.out)
 
     def forward(self, x):
         return self.out(self.dis(x))

@@ -4,21 +4,6 @@ import datetime
 
 from pathlib import Path
 
-
-def call_zeros(x, num_outcome, anchor):
-    zeros = torch.zeros((x.shape[0], num_outcome), dtype=torch.float).cuda()
-    anc = torch.tensor(anchor, dtype=torch.float).cuda()
-
-    return zeros + anc
-
-
-def noise_generate(batchsize, z_dim):
-    noise = torch.randn(batchsize, z_dim)
-    noise = noise.cuda()
-
-    return noise
-
-
 def session(session_name: str) -> (Path, Path): 
     session_path = Path("session") / Path(session_name)
     if session_path.exists():
