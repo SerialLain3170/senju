@@ -144,7 +144,7 @@ class SpatialAttention(nn.Module):
         self.relu = nn.ReLU()
         self.sigmoid = nn.Sigmoid()
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.relu(self.c0(x))
         x = self.sigmoid(self.c1(x))
 
@@ -165,7 +165,7 @@ class ChannelAttention(nn.Module):
         self.pool = nn.AdaptiveAvgPool2d(1)
         self.relu = nn.ReLU()
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         h = self.pool(x).squeeze(3).squeeze(2)
         h = self.relu(self.l0(h))
         h = self.l1(h)
@@ -186,7 +186,7 @@ class ResidualAttentionModule(nn.Module):
         self.relu = nn.ReLU()
         self.sigmoid = nn.Sigmoid()
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         h = self.relu(self.c0(x))
         h = self.c1(h)
         sa = self.sa(h)
@@ -221,13 +221,13 @@ class Generator(nn.Module):
 
         return modules
 
-    def _res(self, x):
+    def _res(self, x: torch.Tensor) -> torch.Tensor:
         for layer in self.res:
             x = layer(x)
 
         return x
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         hinit = self.cinit(x)
         h = self._res(hinit)
         h = self.cmiddle(h)

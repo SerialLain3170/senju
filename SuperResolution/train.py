@@ -151,8 +151,8 @@ class Trainer:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="ImageGeneration")
-    parser.add_argument('--session', type=str, default='gan', help="session name")
+    parser = argparse.ArgumentParser(description="SuperResolution")
+    parser.add_argument('--session', type=str, default='sr', help="session name")
     parser.add_argument('--data_path', type=Path, help="path containing color images")
     args = parser.parse_args()
 

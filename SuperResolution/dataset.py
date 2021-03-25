@@ -42,14 +42,14 @@ class BuildDataset(Dataset):
         return train, val
 
     @staticmethod
-    def _random_flip(img):
+    def _random_flip(img: np.array) -> np.array:
         if np.random.randint(2):
             img = img[:, ::-1, :]
 
         return img
 
     @staticmethod
-    def _random_crop(image, size):
+    def _random_crop(image: np.array, size: int) -> np.array:
         height, width = image.shape[0], image.shape[1]
         rnd0 = np.random.randint(height - size - 1)
         rnd1 = np.random.randint(width - size - 1)
@@ -62,13 +62,13 @@ class BuildDataset(Dataset):
     def _totensor(array_list: List) -> torch.Tensor:
         return torch.cuda.FloatTensor(np.array(array_list).astype(np.float32))
 
-    def _down_sample(self, img):
+    def _down_sample(self, img: np.array) -> np.array:
         inter = np.random.choice(self.interpolations)
         img = cv.resize(img, (64, 64), interpolation=inter)
 
         return img
 
-    def _preprocess(self, img):
+    def _preprocess(self, img: np.array) -> (np.array, np.array):
         img = self._random_crop(img, self.train_size)
         img = self._random_flip(img)
         l_img = self._down_sample(img)
@@ -81,7 +81,7 @@ class BuildDataset(Dataset):
 
         return img, l_img
 
-    def valid(self, validsize: int):
+    def valid(self, validsize: int) -> (torch.Tensor, torch.Tensor):
         h_valid_box = []
         l_valid_box = []
 
