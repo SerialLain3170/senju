@@ -1,0 +1,52 @@
+train:
+    epoch: 1000
+    snapshot_interval: 2000
+    batchsize: 12
+    validsize: 12
+    n_crop: 8
+    n_ref: 4
+
+dataset:
+    extension: ".png"
+    train_size: 256
+
+model:
+    encoder:
+        in_ch: 3
+        base: 64
+        lr: 0.002
+        b1: 0.0
+        b2: 0.99
+        structure_code: 8
+        mode: "train"
+    decoder:
+        base: 64
+        lr: 0.002
+        b1: 0.0
+        b2: 0.99
+        structure_code: 8
+        texture_dim: 2048
+        mode: "train"
+    discriminator:
+        in_ch: 3
+        sn: false
+        lr: 0.002
+        b1: 0.0
+        b2: 0.99
+        mode: "train"
+    con_discriminator:
+        in_ch: 3
+        sn: false
+        lr: 0.002
+        b1: 0.0
+        b2: 0.99
+        mode: "train"
+
+loss:
+    content: 1.0
+    adv: 1.0
+    con_adv: 1.0
+    d_reg:
+        w_dis: 10.0
+        w_con: 1.0
+        interval: 2
