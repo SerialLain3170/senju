@@ -1,10 +1,13 @@
 # KawaiiGenerator
 
 ## Overview
-KawaiiGenerator enables users to try various deep learning tasks related to anime. There are 5 tasks.
-- IllustartionGeneration
-- I2ITranslation
-- IllustartionManipulation
-- Face2AnimeConverter
-- SuperResoution
+KawaiiGenerator enables users to try various deep learning tasks related to anime.
+- ImageManupilation
+- SuperResolution
 
+## Quick Results
+
+| Task | Concept |
+| ---- | ---- |
+| ImageManupilation | ![](./ImageManupilation/data/image.png) |
+| SuperResolution | ![](./SuperResolution/data/concept.png) |
