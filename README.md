@@ -9,5 +9,5 @@ KawaiiGenerator enables users to try various deep learning tasks related to anim
 
 | Task | Concept |
 | ---- | ---- |
-| ImageManupilation | ![](./ImageManupilation/data/image.png) |
+| ImageManupilation | ![](./ImageManupilation/data/image.png)![](./ImageManupilation/data/image2.png) |
 | SuperResolution | ![](./SuperResolution/data/concept.png) |

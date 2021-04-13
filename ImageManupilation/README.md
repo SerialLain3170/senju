@@ -2,6 +2,7 @@
 
 ## Overview
 ![](./data/image.png)
+![](./data/image2.png)
 
 - Manupilate source images as they adapt to reference images
 
@@ -14,16 +15,21 @@ $ python train.py --data_path <DATA_PATH>
 ## Results
 | Examples |
 | ---- |
-| ![](./data/mix_visualize_0.png)
-| ![](./data/mix_visualize_1.png)
-| ![](./data/mix_visualize_2.png)
-| ![](./data/mix_visualize_3.png)
-| ![](./data/mix_visualize_4.png)
-| ![](./data/mix_visualize_5.png)
-| ![](./data/mix_visualize_6.png)
-| ![](./data/mix_visualize_7.png)
-| ![](./data/mix_visualize_8.png)
-| ![](./data/mix_visualize_9.png)
+| ![](./data/mix_visualize_0.png) |
+| ![](./data/mix_visualize_1.png) |
+| ![](./data/mix_visualize_2.png) |
+| ![](./data/mix_visualize_3.png) |
+| ![](./data/mix_visualize_4.png) |
+| ![](./data/mix_visualize_5.png) |
+| ![](./data/mix_visualize_6.png) |
+| ![](./data/mix_visualize_7.png) |
+| ![](./data/mix_visualize_8.png) |
+| ![](./data/mix_visualize_9.png) |
+| ![](./data/mix_visualize_10.png) |
+| ![](./data/mix_visualize_11.png) |
+| ![](./data/mix_visualize_12.png) |
+| ![](./data/mix_visualize_13.png) |
+| ![](./data/mix_visualize_14.png) |
 
 ## References
 - [Swapping Autoencoder for Deep Image Manipulation](https://arxiv.org/pdf/2007.00653.pdf)
