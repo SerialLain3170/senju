@@ -1,0 +1,30 @@
+html {
+    font-family: "游ゴシック体", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", sans-serif;
+    color: #ffffff
+}
+  
+body {
+    background-color: #393e4f;
+}
+  
+.upload {
+    margin: 0 auto;
+    color: #ffffff;
+}
+
+.images {
+    margin: 0 auto;
+    vertical-align: middle;
+}
+
+.manupilate {
+    overflow: hidden;
+    border: 1px solid #ff7f7f;
+    background: #ff7f7f;
+    color:#fff;
+}
+  
+.manupilate:hover {
+    background: #ffd1d1;
+    color: #FFF;
+}

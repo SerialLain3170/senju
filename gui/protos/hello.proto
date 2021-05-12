@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option go_package = "example.com/package/name";
+
+service Hello {
+    rpc ImageManupilate (ImgMessage) returns (ImgResponse) {}
+}
+
+message ImgMessage {
+    string src = 1;
+    string ref = 2;
+}
+
+message ImgResponse {
+    string img = 1;
+}

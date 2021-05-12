@@ -11,3 +11,8 @@ KawaiiGenerator enables users to try various deep learning tasks related to anim
 | ---- | ---- |
 | ImageManupilation | ![](./ImageManupilation/data/image.png)![](./ImageManupilation/data/image2.png) |
 | SuperResolution | ![](./SuperResolution/data/concept.png) |
+
+## GUI Application
+![](./data/gui_im.png)
+
+- KawaiiGenerator also offers a GUI application.

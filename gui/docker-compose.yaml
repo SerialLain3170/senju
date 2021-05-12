@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+    client:
+        image: goclient:latest
+        depends_on:
+            - server
+        ports:
+            - "1323:1323"
+        command: sh ./start_client.sh
+    server:
+        image: pyserver:latest
+        ports:
+            - "50051:50051"
+        command: python3 server.py
+    consumer:
+        image: goconsumer:latest
+        depends_on:
+            - rabbitmq
+        restart: always
+        command: go run consumer/consumer.go
+        volumes:
+            - ./image:/home/static/
+    rabbitmq:
+        image: rabbitmq:latest
+        ports:
+            - "5672:5672"
+    postgres:
+        image: postgres:latest
+        ports:
+            - "5432:5432"
+        environment: 
+            - POSTGRES_USER=Iwakura
+            - POSTGRES_PASSWORD=lain
+            - POSTGRES_DB=hotaru
+        volumes:
+            - ./data:/var/lib/postgresql/data
+    nginx:
+        image: nginx
+        restart: always
+        volumes:
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./nginx/log:/var/log/nginx/
+        depends_on:
+            - client
+        ports:
+            - "5000:80"
+        environment:
+            TZ: "Asia/Tokyo"
+        command: ["nginx", "-g", "daemon off;","-c","/etc/nginx/nginx.conf"]
+
+volumes: 
+    data:
+        driver: local
+    image:
+        driver: local
+        
