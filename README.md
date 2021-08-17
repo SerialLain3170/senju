@@ -25,7 +25,7 @@ Build docker images via
 $ bash build.sh
 ```
 
-#### 2. Start Cyberia
+#### 2. Start GUI
 Start application via the command below and access 0.0.0.0:5000.
 
 ```
