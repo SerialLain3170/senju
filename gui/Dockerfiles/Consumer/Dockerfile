@@ -1,8 +1,8 @@
 FROM golang:1.14
 
 RUN mkdir consumer
-COPY consumer/ /home/consumer/
 
+COPY consumer/ /home/consumer/
 COPY go.mod /home/
 COPY go.sum /home/
 

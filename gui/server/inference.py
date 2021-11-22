@@ -33,7 +33,7 @@ class Inferer:
                       model_config["encoder"]["structure_code"])
         enc.eval()
 
-        weight = torch.load("./ckpts/encoder_160001.pt", map_location=torch.device("cpu"))
+        weight = torch.load("./ckpts/encoder.pt", map_location=torch.device("cpu"))
         enc.load_state_dict(weight)
 
         return enc
@@ -45,7 +45,7 @@ class Inferer:
                   model_config["decoder"]["texture_dim"])
         dec.eval()
 
-        weight = torch.load("./ckpts/decoder_160001.pt", map_location=torch.device("cpu"))
+        weight = torch.load("./ckpts/decoder.pt", map_location=torch.device("cpu"))
         dec.load_state_dict(weight)
 
         return dec

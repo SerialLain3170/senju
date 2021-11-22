@@ -23,7 +23,7 @@ const (
 	address     = "server:50051"
 	amqpaddress = "amqp://rabbitmq:5672"
 	defaultName = "world"
-	title       = "Hotaru"
+	title       = "KawaiiGenerator"
 )
 
 var conn *grpc.ClientConn
