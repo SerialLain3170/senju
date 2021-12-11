@@ -9,16 +9,26 @@
     <title>{{ .Title }}</title>
 </head>
 <body>
-    <div class="upload" style="text-align: center;">
-        <input type="file" name="src_upload" id="src_upload">
-        <input type="file" name="ref_upload" id="ref_upload">
+    <div class="title">
+        <h1 class="titlesentence" style="font-size:36px; color: snow; text-align: left;">{{ .Title }}.Manupilation</h1>
+    </div>
+
+    <div class="prepare_reference">
+        <div class="inputline">
+            1. Select source
+            <input type="file" name="src_upload" id="src_upload">
+        </div>
+        <div class="inputreference">
+            2. Select reference
+            <input type="file" name="ref_upload" id="ref_upload">
+        </div>
     </div>
 
     <div class="images" style="text-align: center;">
-        <image src="/static/first.png" width="256" height="256" class="src_result"></image>
-        <image src="/static/first.png" width="256" height="256" class="ref_result"></image>
-        <button class="manupilate">Manupilate!</button>
-        <image src="/static/first.png" width="256" height="256" class="y_result"></image>
+        <image src="/static/first.png" width="384" height="384" class="src_result"></image>
+        <image src="/static/first.png" width="384" height="384" class="ref_result"></image>
+        <button class="manupilate">3. Convert!</button>
+        <image src="/static/first.png" width="384" height="384" class="y_result"></image>
     </div>
 
     <script type="text/javascript" src="/static/render.js"></script>

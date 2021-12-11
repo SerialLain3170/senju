@@ -6,6 +6,10 @@ html {
 body {
     background-color: #393e4f;
 }
+
+table {
+    margin: auto;
+  }
   
 .upload {
     margin: 0 auto;
@@ -13,8 +17,10 @@ body {
 }
 
 .images {
-    margin: 0 auto;
-    vertical-align: middle;
+    display: flex;
+    position: absolute;
+    top: 30%;
+    left: 5%;
 }
 
 .manupilate {
@@ -28,3 +34,64 @@ body {
     background: #ffd1d1;
     color: #FFF;
 }
+
+.prepare_reference {
+    display: -webkit-flex;
+    display: flex;
+    position: absolute;
+    top: 18%;
+    left: 12%;
+  }
+  
+.inputline {
+    display: inline-block;
+    overflow: hidden;
+    position: relative;
+    padding: 1em;
+    border: 1px solid #ff7f7f;
+    background: #ff7f7f;
+    color:#fff;
+    width: 200px;
+    height: 50px;
+    vertical-align: middle;
+  }
+  
+.inputline input[type="file"] {
+    opacity: 0;
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 0;
+    font-size: 100px;
+    cursor: pointer;
+  }
+  
+.inputreference {
+    display: inline-block;
+    overflow: hidden;
+    position: relative;
+    padding: 1em;
+    border: 1px solid #ff7f7f;
+    background: #ff7f7f;
+    color:#fff;
+    width: 200px;
+    height: 50px;
+    left: 45%;
+    vertical-align: middle;
+  }
+  
+.inputreference input[type="file"] {
+    opacity: 0;
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 0;
+    font-size: 100px;
+    cursor: pointer;
+  }
+
+.ref_result {
+    margin-left: 10px;
+  }
