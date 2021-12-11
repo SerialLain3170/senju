@@ -16,6 +16,7 @@ KawaiiGenerator enables users to try various deep learning tasks related to anim
 ![](./data/gui_im.png)
 
 - KawaiiGenerator also offers a GUI application that enables users to try applications like the figure above.
+- At present, only `.png` files can be processed.
 
 ### Getting Started
 #### 0. Download Pre-trained file
@@ -30,7 +31,7 @@ $ bash build.sh
 ```
 
 #### 2. Start GUI
-Start application via the command below and access 0.0.0.0:5000.
+Start application via the command below and access 0.0.0.0:5000. It will take a little time to show the start page.
 
 ```
 $ docker-compose up -d
