@@ -1,5 +1,8 @@
 # KawaiiGenerator
 
+## Update
+- 03/20/2023: Change repository's name from KawaiiGenerator to senju
+
 ## Overview
 KawaiiGenerator enables users to try various deep learning tasks related to anime.
 - ImageManupilation
@@ -36,6 +39,3 @@ Start application via the command below and access 0.0.0.0:5000. It will take a 
 ```
 $ docker-compose up -d
 ```
-
-### System Configuration
-![](./data/system.png)
